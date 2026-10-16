@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - ELITE RaquetClub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            max-width: 400px;
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .bg-elite-dark {
+            background-color: #38080f !important;
+        }
+        .btn-elite {
+            background-color: #5c0f1a;
+            color: #fff;
+        }
+        .btn-elite:hover {
+            background-color: #38080f;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card login-card p-4 bg-white">
+                <div class="text-center mb-4">
+                    <div class="bg-elite-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-shield-shaded fs-2 text-danger"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">ELITE</h3>
+                    <p class="text-muted small">Academia de Raquetbol - Sistema de Gestión</p>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger alert-dismissible fade show small" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Usuario:</label>
+                        {{ form.username }}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-muted">Contraseña:</label>
+                        {{ form.password }}
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-elite btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Ingresar al Sistema
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center mt-3 text-muted small">
+                ELITE RaquetClub Manager &copy; 2026
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Añadir clases de Bootstrap automáticamente a los inputs del formulario de Django
+    document.addEventListener("DOMContentLoaded", function() {
+        let inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            if(!input.classList.contains('form-check-input')) {
+                input.classList.add('form-control');
+            }
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{% extends 'club/base.html' %}
+
+{% block title %}Inicio - ELITE RaquetClub Manager{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5 py-4 bg-white shadow-sm rounded">
+    <div class="col-md-3 text-center">
+        <div class="bg-elite-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow" style="width: 100px; height: 100px;">
+            <i class="bi bi-shield-shaded fs-1 text-danger"></i>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h1 class="fw-bold text-dark">ELITE Academia de Raquetbol</h1>
+        <p class="text-muted mb-1"><i class="bi bi-calendar-event text-danger"></i> Fecha actual: <strong>{{ today|date:"d/m/Y" }}</strong></p>
+        <span class="badge bg-success">Sistema Activo - Cochabamba, Bolivia</span>
+    </div>
+    <div class="col-md-3 text-md-end text-center mt-3 mt-md-0">
+        <div class="p-3 bg-light rounded border">
+            <span class="text-muted small d-block">Alumnos Activos</span>
+            <span class="fs-4 fw-bold text-dark">{{ active_players_count }}</span>
+        </div>
+    </div>
+</div>
+
+<h3 class="fw-bold mb-4 text-dark"><i class="bi bi-grid-fill text-danger"></i> Menú Principal</h3>
+
+<div class="row g-4">
+    <!-- Botón Alumnos -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 text-center p-4">
+            <div class="card-body">
+                <div class="mb-3 text-elite-red fs-1"><i class="bi bi-people-fill"></i></div>
+                <h4 class="card-title fw-bold">Gestión de Alumnos</h4>
+                <p class="text-muted small">Añade nuevos alumnos, edita perfiles, sube fotos y revisa mensualidades.</p>
+                <a href="{% url 'player_list' %}" class="btn btn-elite w-100 mt-3">Ir a Alumnos</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Caja y Cobros -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 text-center p-4">
+            <div class="card-body">
+                <div class="mb-3 text-success fs-1"><i class="bi bi-cash-coin"></i></div>
+                <h4 class="card-title fw-bold">Caja y Cobros</h4>
+                <p class="text-muted small">Revisa las deudas de los alumnos por fecha y registra pagos en efectivo o QR fácilmente.</p>
+                <a href="{% url 'pending_debts' %}" class="btn btn-dark w-100 mt-3">Ir a Caja y Cobros</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Rendición de Cuentas -->
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100 text-center p-4">
+            <div class="card-body">
+                <div class="mb-3 text-warning fs-1"><i class="bi bi-graph-up-arrow"></i></div>
+                <h4 class="card-title fw-bold">Rendición de Cuentas</h4>
+                <p class="text-muted small">Información de ganancias mensuales, ingresos totales y filtrado por fechas.</p>
+                <a href="{% url 'financial_report' %}" class="btn btn-elite w-100 mt-3">Ver Finanzas</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

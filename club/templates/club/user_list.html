@@ -1,0 +1,80 @@
+{% extends 'club/base.html' %}
+{% block title %}Gestión de Usuarios - ELITE{% endblock %}
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold"><i class="bi bi-gear-fill text-warning"></i> Gestión de Usuarios y Personal</h2>
+        <p class="text-muted">Administra las cuentas y los accesos al sistema.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <a href="{% url 'user_create' %}" class="btn btn-elite">
+            <i class="bi bi-person-plus-fill"></i> Crear Nuevo Usuario
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Rol Asignado</th>
+                        <th>Estado</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users_list %}
+                        <tr>
+                            <td class="fw-bold">
+                                <i class="bi bi-person-circle me-1"></i> {{ u.username }}
+                                {% if u.is_superuser %}
+                                    <span class="badge bg-danger ms-1">Master / Admin</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if u.is_superuser %}
+                                    <span class="badge bg-dark">Superusuario</span>
+                                {% elif u.groups.all.0 %}
+                                    <span class="badge bg-secondary">{{ u.groups.all.0.name }}</span>
+                                {% else %}
+                                    <span class="badge bg-light text-dark">Sin Rol</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if u.is_active %}
+                                    <span class="text-success small fw-bold"><i class="bi bi-check-circle-fill"></i> Activo</span>
+                                {% else %}
+                                    <span class="text-muted small">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                {% if not u.is_superuser or user.is_superuser %}
+                                    {% if u != user %}
+                                        <a href="{% url 'user_password_change' pk=u.pk %}" class="btn btn-sm btn-outline-warning me-1">
+                                            <i class="bi bi-key-fill"></i> Contraseña
+                                        </a>
+                                        <a href="{% url 'user_delete' pk=u.pk %}" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash-fill"></i> Eliminar
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted small fst-italic">Tu cuenta actual</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted small"><i class="bi bi-shield-lock-fill"></i> Protegido</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No tienes usuarios asignados bajo tu supervisión.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

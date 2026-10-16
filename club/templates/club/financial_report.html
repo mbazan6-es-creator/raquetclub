@@ -1,0 +1,107 @@
+{% extends 'club/base.html' %}
+{% block title %}Rendición de Cuentas - ELITE{% endblock %}
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+        <h2 class="fw-bold"><i class="bi bi-graph-up-arrow text-success"></i> Rendición de Cuentas</h2>
+        <p class="text-muted">Control de ingresos y ganancias filtradas por fecha.</p>
+    </div>
+    <div class="col-md-6 text-md-end">
+        <a href="{% url 'pending_debts' %}" class="btn btn-elite">
+            <i class="bi bi-cash-coin"></i> Ir a Caja y Cobros
+        </a>
+    </div>
+</div>
+
+<!-- Filtro por Fechas -->
+<div class="card shadow-sm border-0 mb-4 bg-white">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label fw-bold small">Desde:</label>
+                <input type="date" name="start_date" value="{{ start_date }}" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold small">Hasta:</label>
+                <input type="date" name="end_date" value="{{ end_date }}" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-dark w-100"><i class="bi bi-filter"></i> Filtrar Ingresos</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tarjetas de Resumen -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 bg-white">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small fw-bold">Total Recaudado</h6>
+                <h3 class="fw-bold text-success mb-0">{{ total_filtered }} Bs</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 bg-white">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small fw-bold">Efectivo</h6>
+                <h3 class="fw-bold text-dark mb-0">{{ cash_total }} Bs</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 bg-white">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small fw-bold">QR / Transferencias</h6>
+                <h3 class="fw-bold text-primary mb-0">{{ transfer_total }} Bs</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de Pagos Detallados -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0"><i class="bi bi-list-check"></i> Detalle de Pagos Registrados</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Alumno</th>
+                        <th>Importe</th>
+                        <th>Método</th>
+                        <th>Detalle / Referencia</th>
+                        <th>Cobrado por</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                        <tr>
+                            <td>{{ p.payment_date|date:"d/m/Y H:i" }}</td>
+                            <td class="fw-semibold">{{ p.player }}</td>
+                            <td class="text-success fw-bold">{{ p.amount }} Bs</td>
+                            <td>{{ p.get_payment_method_display }}</td>
+                            <td>
+                                {% if p.payment_method == 'CASH' %}
+                                    <span class="text-muted">Entregó:</span> {{ p.payer_name|default:"-" }}
+                                {% else %}
+                                    <span class="text-muted">Ref:</span> {{ p.reference_number|default:"-" }} {% if p.transfer_date %}({{ p.transfer_date|date:"d/m/Y" }}){% endif %}
+                                {% endif %}
+                            </td>
+                            <td>{{ p.registered_by.username }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No se encontraron pagos en este rango de fechas.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
